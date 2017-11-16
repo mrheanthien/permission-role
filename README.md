@@ -4,7 +4,9 @@
                      Laravel role and permission
 ===============================================================*/
 	video: https://www.youtube.com/watch?v=ucG3NOKBe_8
+
 	link: https://github.com/Zizaco/entrust
+
 	link: http://itsolutionstuff.com/post/laravel-52-user-acl-roles-and-permissions-with-middleware-using-entrust-from-scratch-tutorialexample.html
 
 
