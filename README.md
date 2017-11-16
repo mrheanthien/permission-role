@@ -31,13 +31,13 @@ link: http://itsolutionstuff.com/post/laravel-52-user-acl-roles-and-permissions-
 
 ### 6. Open your config/auth.php and add the following to it:
 
-   'providers' => [
-    	'users' => [
-        	'driver' => 'eloquent',
-        	'model' => App\User::class,
-        	'table' => 'users',
-    		],
-	  ],
+	   'providers' => [
+			'users' => [
+					'driver' => 'eloquent',
+					'model' => App\User::class,
+					'table' => 'users',
+				],
+		  ],
 
 ### 7. If you want to use Middleware (requires Laravel 5.1 or later) you also need to add the following:
 
