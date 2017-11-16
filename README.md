@@ -10,24 +10,24 @@ link: http://itsolutionstuff.com/post/laravel-52-user-acl-roles-and-permissions-
 
 ### 1. In order to install Laravel 5 Entrust, just add the following to your composer.json. Then run composer update:
 
-   "zizaco/entrust": "5.2.x-dev"
+   	"zizaco/entrust": "5.2.x-dev"
 
 ### 2. opend env
    /* change CACHE_DRIVER=file to array */
    
-   CACHE_DRIVER=array
+   	CACHE_DRIVER=array
 
 ### 3. Open your config/app.php and add the following to the providers array:
 
-   Zizaco\Entrust\EntrustServiceProvider::class,
+   	Zizaco\Entrust\EntrustServiceProvider::class,
    
 ### 4. In the same config/app.php and add the following to the aliases array:
 
-  'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+  	'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
 
 ### 5. Run command
 
-   php artisan vendor:publish
+   	php artisan vendor:publish
 
 ### 6. Open your config/auth.php and add the following to it:
 
@@ -48,10 +48,11 @@ link: http://itsolutionstuff.com/post/laravel-52-user-acl-roles-and-permissions-
 ### 8. opend vender->zizaco->entrust->src->commands->MigrationCommand.php
 
     #### for laravel5.5
-    change fire to handle
+    	change fire to handle
 
 ### 9. use command for generate the Entrust migration:
-   php artisan entrust:migration
+
+   	php artisan entrust:migration
 
 ### 10. opend app\Providers\AppServiceProvider.php
 
@@ -174,8 +175,8 @@ link: http://itsolutionstuff.com/post/laravel-52-user-acl-roles-and-permissions-
 		
     ### Permission
     	<?php namespace App;
-	use Zizaco\Entrust\EntrustPermission;
-	class Permission extends EntrustPermission{}
+		use Zizaco\Entrust\EntrustPermission;
+		class Permission extends EntrustPermission{}
 
 ### 14. opend app\database\seeds
 
