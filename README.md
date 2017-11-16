@@ -1,4 +1,4 @@
-# permission-role
+# Laravel5.5 User Role and Permission
 
 /*==============================================================
                      Laravel role and permission
@@ -208,3 +208,241 @@
 
 
 		});
+		
+### 17. add controller
+	## RoleController
+		<?php
+
+			namespace App\Http\Controllers;
+
+			use Illuminate\Http\Request;
+			use App\Role;
+			use App\Permission;
+			use DB;
+
+			class RoleController extends Controller
+			{
+			    /**
+			     * Display a listing of the resource.
+			     *
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function index()
+			    {
+					$roles = Role::all();
+				return view('admin.role-index',compact('roles'));
+			    }
+
+			    /**
+			     * Show the form for creating a new resource.
+			     *
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function create()
+			    {
+					$permissions    = Permission::all();
+					$permission_sub = DB::select('select distinct parent_id From permissions');
+				return view('admin.role-create',compact('permissions','permission_sub'));
+			    }
+
+			    /**
+			     * Store a newly created resource in storage.
+			     *
+			     * @param  \Illuminate\Http\Request  $request
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function store(Request $request)
+			    {
+					//dd($request->all());
+					 $this->validate($request, [
+							'display_name' => 'required',
+							'name' => 'required',
+							'permission' => 'required',
+
+						]);
+					$role = Role::create($request->except(['permission','_token']));
+
+					foreach($request->permission as $key=> $value){
+						$role->attachPermission($value);
+					}
+
+					return back()->with('success','Data Inset successfuly.');
+			    }
+
+			    /**
+			     * Display the specified resource.
+			     *
+			     * @param  int  $id
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function show($id)
+			    {
+				//
+			    }
+
+			    /**
+			     * Show the form for editing the specified resource.
+			     *
+			     * @param  int  $id
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function edit($id)
+			    {
+					$role = Role::find($id);
+				$permissions = Permission::all();
+					$role_permissions = $role->perms()->pluck('id','id')->toArray();
+				$permission_sub = DB::select('select distinct parent_id From permissions');
+				return view('admin.role-edit',compact('permissions','role','role_permissions','permission_sub'));
+			    }
+
+			    /**
+			     * Update the specified resource in storage.
+			     *
+			     * @param  \Illuminate\Http\Request  $request
+			     * @param  int  $id
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function update(Request $request, $id)
+			    {
+						$this->validate($request, [
+
+									'display_name' => 'required',
+
+									'name' => 'required',
+
+									'permission' => 'required',
+
+								]);
+
+
+
+
+				$role = Role::find($id);
+					$role->name = $request->name;
+					$role->display_name = $request->display_name;
+					$role->save();
+				DB::table("permission_role")->where('role_id',$id)->delete();
+					foreach($request->permission as $key=> $value){
+						$role->attachPermission($value);
+					}
+					return back()->with('success','Data bas been update successsfuly');
+			    }
+
+			    /**
+			     * Remove the specified resource from storage.
+			     *
+			     * @param  int  $id
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function destroy($id)
+			    {
+				DB::table("roles")->where('id',$id)->delete();
+					return back()->with('success','Data delete successsfuly');
+			    }
+			}
+
+	## RoleController
+	
+		<?php
+
+			namespace App\Http\Controllers;
+
+			use Illuminate\Http\Request;
+			use DB;
+			use App\Role;
+			use App\User;
+			use Hash;
+			class UserController extends Controller
+			{
+			    /**
+			     * Display a listing of the resource.
+			     *
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function index(){
+				$user = DB::select("SELECT id,name,email,date_format(created_at,'%d-%M-%Y, %h:%i:%s %p') as created_at,date_format(updated_at,'%d-%M-%Y, %h:%i:%s %p') as updated_at FROM users");
+				return view('admin.user-index',compact('user'));
+			    }
+
+			    /**
+			     * Show the form for creating a new resource.
+			     *
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function create()
+			    {
+					$roles = Role::all();
+				return view('admin.user-create',compact('roles'));
+			    }
+
+			    /**
+			     * Store a newly created resource in storage.
+			     *
+			     * @param  \Illuminate\Http\Request  $request
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function store(Request $request)
+			    {
+					$this->validate($request, [
+									'name' => 'required',
+									'email' => 'required|email|unique:tbl_users,email',
+									'password' => 'required|same:confirm-password',
+									'roles' => 'required'
+								]);
+
+
+								$input = $request->all();
+								$input['password'] = Hash::make($input['password']);
+								$user = User::create($input);
+								foreach ($request->input('roles') as $key => $value) {
+									$user->attachRole($value);
+								}
+					return back()->with('success','Data Inset successfuly.');
+
+			    }
+
+			    /**
+			     * Display the specified resource.
+			     *
+			     * @param  int  $id
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function show($id)
+			    {
+				//
+			    }
+
+			    /**
+			     * Show the form for editing the specified resource.
+			     *
+			     * @param  int  $id
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function edit($id)
+			    {
+				//
+			    }
+
+			    /**
+			     * Update the specified resource in storage.
+			     *
+			     * @param  \Illuminate\Http\Request  $request
+			     * @param  int  $id
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function update(Request $request, $id)
+			    {
+				//
+			    }
+
+			    /**
+			     * Remove the specified resource from storage.
+			     *
+			     * @param  int  $id
+			     * @return \Illuminate\Http\Response
+			     */
+			    public function destroy($id)
+			    {
+				//
+			    }
+			}
