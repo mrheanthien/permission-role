@@ -209,7 +209,7 @@
 
 		});
 		
-### 17. add controller
+### 17. add controller RoleController
 	## RoleController
 		<?php
 
@@ -340,6 +340,8 @@
 					return back()->with('success','Data delete successsfuly');
 			    }
 			}
+			
+### 18. add controller UserController
 
 	## RoleController
 	
