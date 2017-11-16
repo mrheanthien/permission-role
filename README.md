@@ -56,6 +56,7 @@ link: http://itsolutionstuff.com/post/laravel-52-user-acl-roles-and-permissions-
 ### 10. opend app\Providers\AppServiceProvider.php
 
   use Illuminate\Support\Facades\Schema;
+  
     public function boot()
     {
         Schema::defaultStringLength(191);
