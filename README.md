@@ -1,10 +1,5 @@
 # Laravel5.5 User Role and Permission
 
-/*==============================================================
-                     Laravel role and permission
-===============================================================*/
-
-
 ### 1. In order to install Laravel 5 Entrust, just add the following to your composer.json. Then run composer update:
 
    	"zizaco/entrust": "5.2.x-dev"
